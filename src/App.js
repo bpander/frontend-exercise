@@ -48,7 +48,12 @@ function App() {
                                         <div>
                                             {monster.name}
                                         </div>
-                                        <button onClick={onGetDetails(monster.name)}>Get Details</button>
+                                        <button
+                                            onClick={onGetDetails(monster.name)}
+                                            className={'pokedex__list-item__cta'}
+                                        >
+                                            Get Details
+                                        </button>
                                     </div>
                                 )
                             })
