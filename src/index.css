@@ -46,6 +46,10 @@ html {
   border-top: 1px solid #000;
 }
 
+.pokedex__status {
+  padding: 1rem;
+}
+
 .pokedex__list-item {
   display: flex;
   justify-content: center;

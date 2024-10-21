@@ -1,33 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchAllPokemon } from "./api";
 
 function App() {
-    const [pokemonIndex, setPokemonIndex] = useState([])
-    const [pokemon, setPokemon] = useState([])
+    const [allPokemon, setAllPokemon] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     const [searchValue, setSearchValue] = useState('')
     const [pokemonDetails, setPokemonDetails] = useState()
 
     useEffect(() => {
         const fetchPokemon = async () => {
-            const {results: pokemonList} = await fetchAllPokemon()
-
-            setPokemon(pokemonList)
-            setPokemonIndex(pokemonList)
+            setError(null)
+            setLoading(true)
+            try {
+                const {results: pokemonList} = await fetchAllPokemon()
+                setAllPokemon(pokemonList)
+            } catch (e) {
+                setError(e)
+            }
+            setLoading(false)
         }
 
-        fetchPokemon().then(() => {
-            /** noop **/
-        })
-    }, [searchValue])
+        fetchPokemon()
+    }, [])
 
     const onSearchValueChange = (event) => {
         const value = event.target.value
         setSearchValue(value)
-
-        setPokemon(
-            pokemonIndex.filter(monster => !monster.name.includes(value))
-        )
     }
+
+    const filteredPokemon = useMemo(() => {
+        if (!searchValue.trim()) return allPokemon
+        const re = new RegExp(searchValue, 'i')
+        return allPokemon.filter(monster => re.test(monster.name))
+    }, [allPokemon, searchValue])
 
     const onGetDetails = (name) => async () => {
         /** code here **/
@@ -39,10 +45,14 @@ function App() {
                 <input value={searchValue} onChange={onSearchValueChange} placeholder={'Search Pokemon'}/>
             </div>
             <div className={'pokedex__content'}>
-                {pokemon.length > 0 && (
+                {loading ? (
+                    <div className={'pokedex__status'}>Loading...</div>
+                ) : error ? (
+                    <div className={'pokedex__status'}>An error has occurred.</div>
+                ) : filteredPokemon.length > 0 ? (
                     <div className={'pokedex__search-results'}>
                         {
-                            pokemon.map(monster => {
+                            filteredPokemon.map(monster => {
                                 return (
                                     <div className={'pokedex__list-item'} key={monster.name}>
                                         <div>
@@ -58,6 +68,10 @@ function App() {
                                 )
                             })
                         }
+                    </div>
+                ) : (
+                    <div className={'pokedex__status'}>
+                        No Results Found
                     </div>
                 )}
                 {
