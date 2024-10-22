@@ -28,10 +28,14 @@ const loadEvolutionChain = (evolutionChainUrl) => {
     // I used the `fetchEvolutionChainById` since that was how I interpreted the README ("Use the api functions defined in `api.js` to retrieve this data").
     // If this were my own personal project, I'd probably be more inclined to use `evolution_chain.url` directly.
     // If it were a production project, I'd start a thread in the PR or group chat or similar to discuss it as a group.
-    const re = new RegExp('/evolution-chain/(.+)$')
-    const match = removeTrailingSlash(evolutionChainUrl).match(re)
-    const evolutionId = match?.[1] || null
-    return fetchEvolutionChainById(evolutionId)
+    try {
+        const re = new RegExp('/evolution-chain/(.+)$')
+        const match = removeTrailingSlash(evolutionChainUrl).match(re)
+        const evolutionId = match?.[1] || null
+        return fetchEvolutionChainById(evolutionId)
+    } catch {
+        return null
+    }
 }
 
 const useLatest = (value) => {
@@ -60,7 +64,7 @@ const PokemonDetails = ({ name }) => {
         loadPokemonDetails()
     }, [name, latestNameRef])
 
-    if (!details || !evolutionChain) return '...'
+    if (!details) return '...'
 
     return (
         <div className={'detail'}>
@@ -95,7 +99,7 @@ const PokemonDetails = ({ name }) => {
                         <h3 className={'detail__heading detail__heading--tight'}>
                             Evolutions
                         </h3>
-                        <PokemonEvolution evolutions={[evolutionChain.chain]} />
+                        {evolutionChain && <PokemonEvolution evolutions={[evolutionChain.chain]} />}
                     </div>
                 </div>
             </div>
