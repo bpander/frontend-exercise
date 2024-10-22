@@ -48,6 +48,22 @@ Please take some time to answer the following questions. Your answers should go 
 
 - Given more time, what would you suggest for improving the performance of this app?
 
+I'd implement some caching logic so if you click "Get Details" for a pokemon you've already gotten details for before, it would just load it from the cache rather than making all new api calls.
+
+And the list might benefit from some memoization. In its current form, there's a max of 151 items, which isn't a ton, and it was still snappy on an old laptop so I didn't want to prematurely optimize. But a future version could display a lot more items in which case I might wrap some components in `React.memo`. There are more drastic options too like lazy-loading the items (which you could do either client-side or server-side depending on what the api supports/can handle) or throttling the filter function.
+
+
 - Is there anything you would consider doing if we were to go live with this app?
 
+I'd use TypeScript instead of vanilla JS. It wouldn't take much effort, and it'd make the code a lot more self-documenting and catch more bugs at compile-time.
+
+I'd also add some more error handling, especially with the detail card. It makes 3 api calls to get the data for that card, and any or all of them could fail. I added _some_ error-handling, but it could definitely be a lot more robust and surface more information to the user.
+
+
 - What was the most challenging aspect of this work for you (if at all)?
+
+I found it pretty straightforward, but I can think of a couple things.
+
+The mockups made it seem like the content should affect the width of their containers rather than the containers being a fixed/percentage-based width. So I implemented it that way, but it definitely would've been easier just to slap a defined width on the containers. It might be a better user experience too since it'd prevent the layout from shifting as you click through the pokemon. If this were a production project, I'd discuss those options with the designers.
+
+And I was thrown for a loop when I realized the evolution chain ID was different from the species ID. I didn't find a straightforward way to get from a name to its evolution chain though I might've just missed something. I left a comment near where `fetchEvolutionChainById` is used which goes into more detail.
