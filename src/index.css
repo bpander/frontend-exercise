@@ -31,15 +31,16 @@ html {
   display: flex;
   gap: 5rem;
   margin-top: 0.75rem;
-  overflow: scroll;
-  border: 2px solid #ff0000;
-  border-radius: 0.25rem;
+  overflow: auto;
 }
 
 .pokedex__search-input {
 }
 
 .pokedex__search-results {
+  overflow-y: scroll;
+  border: 2px solid #ff0000;
+  border-radius: 0.25rem;
 }
 
 .pokedex__search-results > * + * {
@@ -61,4 +62,60 @@ html {
 }
 
 .pokedex__details {
+  align-self: flex-start;
+  border: 2px solid #000;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+
+.detail__heading {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.detail__heading--tight {
+  margin: 0;
+}
+
+.detail__footer {
+  margin-top: 1rem;
+}
+
+.list {
+  margin-left: 1rem;
+}
+
+.flex-grid {
+  display: flex;
+}
+
+.flex-grid--gutters {
+  margin: -0.5rem;
+}
+
+.flex-grid--gutters > * {
+  margin: 0.5rem;
+}
+
+.flex-grid--center {
+  justify-content: center;
+}
+
+.tree-list {
+  list-style: none;
+  display: flex;
+}
+
+.tree-list > * {
+  display: flex;
+}
+
+.tree-list__node + .tree-list {
+  margin-left: 1rem;
+}
+
+.tree-list__node {
+  font-style: italic;
 }
